@@ -1,4 +1,4 @@
-package crimen.com.ec.crimendroid_rest;
+package crimen.com.ec.crimendroid_rest.dominio;
 
 import java.util.Date;
 
@@ -11,6 +11,10 @@ public class Crimen {
     private String titulo;
     private boolean resuelto;
     private Date fecha;
+
+    public Crimen(){
+        fecha=new Date();
+    }
 
     public int getCrimenId() {
         return crimenId;
@@ -34,6 +38,14 @@ public class Crimen {
 
     public void setResuelto(boolean resuelto) {
         this.resuelto = resuelto;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
 
     @Override

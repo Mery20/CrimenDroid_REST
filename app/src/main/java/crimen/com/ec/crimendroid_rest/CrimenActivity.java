@@ -1,5 +1,8 @@
 package crimen.com.ec.crimendroid_rest;
 
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,52 +16,30 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import crimen.com.ec.crimendroid_rest.util.RequestQueueSingleton;
+import crimen.com.ec.crimendroid_rest.dominio.Crimen;
+import crimen.com.ec.crimendroid_rest.fragments.CrimenFragment;
+import crimen.com.ec.crimendroid_rest.fragments.ListCrimenFragment;
 
-public class CrimenActivity extends AppCompatActivity {
+public class CrimenActivity extends SingleFragmentActivity {
 
 
-    private List<Crimen> crimenes;
+    private static final String EXTRA_CRIMEN_ID = "ec.com.crimen.crimendroid_fragmentarguments.crimen_id";
 
+    public static Intent newIntent(Context context, int crimenId) {
+        Intent intent = new Intent(context, CrimenActivity.class);
+        intent.putExtra(EXTRA_CRIMEN_ID, crimenId);
+        return intent;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_crimen);
-
-        // OJO CON LA IP
-        String url="http://192.168.1.100:8080/crimenes";
-
-        RequestQueue queue=Volley.newRequestQueue(this);
-
-        StringRequest stringRequest=new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("CRIMEN",response);
-                        Gson gson=new Gson();
-                        List<Crimen> result= gson.fromJson(response,
-                                new TypeToken<List<Crimen>>(){}.getType());
-
-                        // Paso la lista de crimenes para asignar al adapter
-                        llenarCrimenes(crimenes);
-
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("CRIMEN",error.getMessage());
-                    }
-        });
-
-        queue.add(stringRequest);
-
-    }
-
-    public void llenarCrimenes(List<Crimen> crimenes){
-        this.crimenes=crimenes;
+    public Fragment CreateFragment() {
+        int crimenId = getIntent().getIntExtra(EXTRA_CRIMEN_ID, 0);
+        return CrimenFragment.newInstance(crimenId);
     }
 }
+
+
+
+
